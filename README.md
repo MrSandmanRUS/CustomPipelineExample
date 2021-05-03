@@ -24,6 +24,6 @@ Don't forget to specify the path to your interpreter in files train.py and test.
         │        │  ├──CustomEstimator.scala            # Custom estimator, which using python files for fitting and running model
         │        │  └──CustomTransformer.scala          # Custom transformer, which creating new field feature3, as a sum of feature1 and feature2
         │        ├──Test.scala                          # Test pipeline
-        │        └──Train.scala                         # Traing pipeline 
+        │        └──Train.scala                         # Train pipeline 
         ├──build.sbt                                    # Build properties   
         └──README.md                                    # Awesome README
