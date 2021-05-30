@@ -1,6 +1,5 @@
-#!/home/vitaliy/anaconda3/bin/python3
+#!/usr/bin/python3
 
-import numpy as np
 import pandas as pd
 import pickle
 import sys
@@ -9,7 +8,8 @@ import re
 
 from sklearn.linear_model import LogisticRegression
 
-rows = [] #here we keep input data to Dataframe constructor
+# Here we keep input data to Dataframe constructor
+rows = []
 
 for line in sys.stdin:
     line = line.replace('[', '')
@@ -26,7 +26,7 @@ for line in sys.stdin:
         line_dict[name] = value
     rows.append(line_dict)
 
-#initialize a dataframe from the list
+# Initialize a dataframe from the list
 df = pd.DataFrame(rows)
 
 feature_columns = []

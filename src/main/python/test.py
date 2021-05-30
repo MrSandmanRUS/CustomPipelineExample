@@ -1,4 +1,4 @@
-#!/home/vitaliy/anaconda3/bin/python3
+#!/usr/bin/python3
 
 import pandas as pd
 import pickle
@@ -11,18 +11,17 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 pd.set_option('display.max_colwidth', -1)
 
-#read the model, deserialize and unpickle it.
-
+# Read the model, deserialize and unpickle it.
 model = pickle.loads(
           base64.b64decode(
             open("python.model").read().encode('utf-8')
           )
         )
 
-# print("success")
-rows = [] #here we keep input data to Dataframe constructor
+# Here we keep input data to Dataframe constructor
+rows = []
 
-# iterate over standard input
+# Iterate over standard input
 for line in sys.stdin:
     line = line.replace('[', '')
     line = line.replace(']', '')
@@ -36,15 +35,12 @@ for line in sys.stdin:
 
     rows.append(line_dict)
 
-
-
-#initialize a dataframe from the list
+# Initialize a dataframe from the list
 df = pd.DataFrame(rows)
 
-#run inference
+# Run inference
 pred = model.predict(df)
 
 df['preds'] = pred
-
 
 print(df)

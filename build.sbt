@@ -16,7 +16,7 @@ assemblyMergeStrategy in assembly := {
   case x => MergeStrategy.first
 }
 
-assemblyJarName in assembly := "CustomPipelineExample.jar "
+assemblyJarName in assembly := "CustomPipelineExample.jar"
 
 
 

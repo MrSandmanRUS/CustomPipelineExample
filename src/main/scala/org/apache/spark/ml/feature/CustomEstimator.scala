@@ -6,7 +6,7 @@ import org.apache.spark.ml.param.ParamMap
 import org.apache.spark.ml.util.{DefaultParamsReadable, DefaultParamsReader, DefaultParamsWritable, DefaultParamsWriter, Identifiable, MLReadable, MLReader, MLWritable, MLWriter}
 import org.apache.spark.ml.{Estimator, Model}
 import org.apache.spark.sql.functions.{col, _}
-import org.apache.spark.sql.types.{DoubleType, IntegerType, StructField, StructType}
+import org.apache.spark.sql.types.{DoubleType, FloatType, IntegerType, StructField, StructType}
 import org.apache.spark.sql.{DataFrame, Dataset}
 
 class CustomEstimator(override val uid: String) extends Estimator[CustomEstimatorModel]
@@ -29,10 +29,14 @@ class CustomEstimator(override val uid: String) extends Estimator[CustomEstimato
   override def copy(extra: ParamMap): CustomEstimator = defaultCopy(extra)
 
   override def transformSchema(schema: StructType): StructType = {
-    StructType(Seq(StructField("feature1",IntegerType,true),
+    StructType(Seq(StructField("feature0",IntegerType,true),
+      StructField("feature1",IntegerType,true),
       StructField("feature2",IntegerType,true),
       StructField("feature3",IntegerType,true),
-      StructField("preds",IntegerType,true)))
+      StructField("feature4",FloatType,true),
+      StructField("feature5",IntegerType,true),
+      StructField("feature6",FloatType,true),
+      StructField("preds",FloatType,true)))
   }
 
   def this() = this(Identifiable.randomUID("CustomEstimator"))
@@ -68,22 +72,32 @@ class CustomEstimatorModel(override val uid: String, val model: String) extends 
     res = res.withColumn("feature0", split_col.getItem(1))
     res = res.withColumn("feature1", split_col.getItem(2))
     res = res.withColumn("feature2", split_col.getItem(3))
-    res = res.withColumn("preds", split_col.getItem(4))
+    res = res.withColumn("feature3", split_col.getItem(4))
+    res = res.withColumn("feature4", split_col.getItem(5))
+    res = res.withColumn("feature5", split_col.getItem(6))
+    res = res.withColumn("feature6", split_col.getItem(7))
+    res = res.withColumn("preds", split_col.getItem(8))
 
     //delete row with headers
     res = res.filter(res("preds") =!= "preds")
 
-    res = res.select(col("feature0"), col("feature1"), col("feature2"), col("preds"))
+    res = res.select(col("feature0"), col("feature1"), col("feature2"),
+      col("feature3"), col("feature4"), col("feature5"), col("feature6"),
+      col("preds"))
 
     res
 
   }
 
   override def transformSchema(schema: StructType): StructType = {
-    StructType(Seq(StructField("feature1",IntegerType,true),
+    StructType(Seq(StructField("feature0",IntegerType,true),
+      StructField("feature1",IntegerType,true),
       StructField("feature2",IntegerType,true),
       StructField("feature3",IntegerType,true),
-      StructField("preds",IntegerType,true)))
+      StructField("feature4",FloatType,true),
+      StructField("feature5",IntegerType,true),
+      StructField("feature6",FloatType,true),
+      StructField("preds",FloatType,true)))
   }
 
   override def write: MLWriter = new CustomEstimatorModelWriter(this)
