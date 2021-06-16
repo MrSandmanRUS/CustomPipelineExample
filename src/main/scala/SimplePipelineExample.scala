@@ -2,6 +2,7 @@ import org.apache.hadoop.conf.Configuration
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.ml.feature.{HashingTF, Tokenizer}
 import org.apache.spark.ml.Pipeline
+import org.apache.spark.ml.classification.LogisticRegression
 
 object SimplePipelineExample {
   def main(args: Array[String]) = {
@@ -18,16 +19,19 @@ object SimplePipelineExample {
     import spark.implicits._
 
     val df = Seq(
-      ("str1 test"),
-      ("str2 test test test here here we go"),
-      ("str1 str1")
-    ).toDF("in")
+      (0L, "str1 test", 1.0),
+      (1L, "str2 test test test here here we go", 0.0),
+      (2L, "str1 str1", 1.0)
+    ).toDF("id", "in", "label")
     df.show()
     val tokenizer = new Tokenizer().setInputCol("in").setOutputCol("out")
     // HashingTF, maps a sequence of terms to their term frequencies using the hashing trick
     val hashingTF = new HashingTF().setNumFeatures(10).setInputCol(tokenizer.getOutputCol).setOutputCol("features")
 
-    val pipeline = new Pipeline().setStages(Array(tokenizer, hashingTF))
+    val lr = new LogisticRegression().setMaxIter(100).setRegParam(0.01)
+
+    val pipeline = new Pipeline().setStages(Array(tokenizer, hashingTF, lr))
+
     // Fit model
     val model = pipeline.fit(df)
 
