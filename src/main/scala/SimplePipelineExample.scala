@@ -19,9 +19,9 @@ object SimplePipelineExample {
     import spark.implicits._
 
     val df = Seq(
-      (0L, "str1 test", 1.0),
-      (1L, "str2 test test test here here we go", 0.0),
-      (2L, "str1 str1", 1.0)
+      (0L, "money bingo", 1.0),
+      (1L, "Good afternoon, we are waiting for your answer.", 0.0),
+      (2L, "money money", 1.0)
     ).toDF("id", "in", "label")
     df.show()
     val tokenizer = new Tokenizer().setInputCol("in").setOutputCol("out")
@@ -31,6 +31,7 @@ object SimplePipelineExample {
     val lr = new LogisticRegression().setMaxIter(100).setRegParam(0.01)
 
     val pipeline = new Pipeline().setStages(Array(tokenizer, hashingTF, lr))
+//    val pipeline = new Pipeline().setStages(Array(tokenizer, hashingTF))
 
     // Fit model
     val model = pipeline.fit(df)
